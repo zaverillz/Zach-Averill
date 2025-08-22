@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zach Averill - Outdoor Product Development Engineer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8f4f8 100%);
+            color: #2c3e2d;
+            line-height: 1.6;
+        }
+        
+        .wireframe-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .page {
+            display: none;
+            padding: 0;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Navigation */
+        nav {
+            background: linear-gradient(90deg, #2c5530 0%, #1e3a20 100%);
+            border-bottom: 3px solid #4a7c59;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(44, 62, 45, 0.3);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            background: #ffffff;
+            color: #2c5530;
+            padding: 0.8rem 1.5rem;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            border: 2px solid #4a7c59;
+            letter-spacing: 1px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #ffffff;
+            background: transparent;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: #ffffff;
+            color: #2c5530;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Wireframe elements */
+        .box {
+            border: 2px solid #4a7c59;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            background: #ffffff;
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(44, 62, 45, 0.1);
+        }
+        
+        .box::before {
+            content: attr(data-label);
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: #2c5530;
+            color: #ffffff;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .hero {
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2c5530 0%, #4a7c59 50%, #87ceeb 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="%23ffffff"></path><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="%23ffffff"></path><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="%23ffffff"></path></svg>') no-repeat center bottom;
+            background-size: cover;
+        }
+        
+        .content {
+            padding: 2rem;
+        }
+        
+        .grid {
+            display: grid;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .two-col {
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .three-col {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .four-col {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        
+        .product-card {
+            height: 200px;
+            border: 2px solid #4a7c59;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8f4f8 100%);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(44, 85, 48, 0.2);
+            border-color: #2c5530;
+        }
+        
+        .product-card.z4-camalots {
+            background: linear-gradient(135deg, #2c5530 0%, #4a7c59 100%);
+            color: white;
+        }
+        
+        .product-card.helio-skis {
+            background: linear-gradient(135deg, #87ceeb 0%, #4a7c59 100%);
+            color: white;
+        }
+        
+        .product-card.climbing-skins {
+            background: linear-gradient(135deg, #4a7c59 0%, #2c5530 100%);
+            color: white;
+        }
+        
+        .image-placeholder {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #4a7c59 0%, #2c5530 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(44, 85, 48, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 85, 48, 0.4);
+            background: linear-gradient(135deg, #5a8c69 0%, #3c6540 100%);
+        }
+        
+        .skill-bar {
+            height: 20px;
+            background: #e8f4f8;
+            border: 1px solid #4a7c59;
+            position: relative;
+            margin: 0.5rem 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4a7c59, #2c5530);
+            border-radius: 10px;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #1e3a20 0%, #2c5530 100%);
+            color: #ffffff;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            position: relative;
+        }
+        
+        .page-title {
+            background: linear-gradient(135deg, #2c5530 0%, #4a7c59 100%);
+            color: #ffffff;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .breadcrumb {
+            background: #e8f4f8;
+            padding: 1rem 2rem;
+            font-size: 0.9rem;
+            color: #4a7c59;
+            border-left: 4px solid #2c5530;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .two-col, .three-col, .four-col {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wireframe-container">
+        <nav>
+            <div class="nav-container">
+                <div class="logo">ZACH AVERILL</div>
+                <div class="nav-links">
+                    <div class="nav-link active" onclick="showPage('home')">Home</div>
+                    <div class="nav-link" onclick="showPage('about')">About</div>
+                    <div class="nav-link" onclick="showPage('portfolio')">Portfolio</div>
+                    <div class="nav-link" onclick="showPage('resume')">Resume</div>
+                    <div class="nav-link" onclick="showPage('contact')">Contact</div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- HOME PAGE -->
+        <div class="page active" id="home">
+            <div class="hero">
+                <div style="text-align: center;">
+                    <div style="width: 150px; height: 150px; background: rgba(255,255,255,0.9); border: 3px solid #ffffff; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #2c5530; font-weight: bold; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">Profile Photo</div>
+                    <h1 style="margin: 1rem 0; font-size: 2.5rem;">Zach Averill</h1>
+                    <p style="margin: 0.5rem 0; color: #ffffff; font-size: 1.2rem;">Outdoor Product Development Engineer</p>
+                    <p style="margin: 1rem 0; color: rgba(255,255,255,0.9); font-style: italic;">Designing gear for mountain adventures</p>
+                    <div style="margin: 2rem 0;">
+                        <button class="btn" style="margin: 0 0.5rem;">View My Work</button>
+                        <button class="btn" style="margin: 0 0.5rem;">Contact Me</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="box" data-label="Brief Introduction">
+                    <h2 style="color: #2c5530; margin-bottom: 1rem;">Welcome to my portfolio!</h2>
+                    <p>I'm an outdoor product development engineer passionate about creating innovative gear that enhances mountain adventures. From climbing protection to backcountry skiing equipment, I focus on designing products that are both technically excellent and field-tested for real-world performance.</p>
+                </div>
+                
+                <div class="box" data-label="Featured Work">
+                    <h2 style="color: #2c5530; margin-bottom: 1.5rem;">Featured Projects</h2>
+                    <div class="grid three-col">
+                        <div class="product-card z4-camalots">
+                            <div class="image-placeholder">📷 Z4 Camalot Photo</div>
+                            <div style="text-align: center; z-index: 2; position: relative;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🧗</div>
+                                <h3 style="font-weight: bold;">Z4 Camalots</h3>
+                                <p style="font-size: 0.9rem; opacity: 0.9;">Revolutionary active camming devices</p>
+                            </div>
+                        </div>
+                        <div class="product-card helio-skis">
+                            <div class="image-placeholder">📷 Helio Ski Photo</div>
+                            <div style="text-align: center; z-index: 2; position: relative;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎿</div>
+                                <h3 style="font-weight: bold;">Helio Skis</h3>
+                                <p style="font-size: 0.9rem; opacity: 0.9;">Backcountry ski design</p>
+                            </div>
+                        </div>
+                        <div class="product-card climbing-skins">
+                            <div class="image-placeholder">📷 Climbing Skin Photo</div>
+                            <div style="text-align: center; z-index: 2; position: relative;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">⛷️</div>
+                                <h3 style="font-weight: bold;">Climbing Skins</h3>
+                                <p style="font-size: 0.9rem; opacity: 0.9;">Ski touring adhesives</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="box" data-label="Core Expertise">
+                    <h2 style="color: #2c5530; margin-bottom: 1.5rem;">What I Do</h2>
+                    <div class="grid four-col">
+                        <div style="text-align: center; padding: 1rem;">
+                            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #4a7c59, #2c5530); margin: 0 auto 1rem; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">🏔️</div>
+                            <h4 style="color: #2c5530; margin-bottom: 0.5rem;">Product Development</h4>
+                            <p style="font-size: 0.9rem; color: #4a7c59;">Overseeing Concept to Commercialization</p>
+                        </div>
+                        <div style="text-align: center; padding: 1rem;">
+                            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #4a7c59, #2c5530); margin: 0 auto 1rem; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">🎯</div>
+                            <h4 style="color: #2c5530; margin-bottom: 0.5rem;">Field Testing</h4>
+                            <p style="font-size: 0.9rem; color: #4a7c59;">Turning User Feedback Into Product Enhancements</p>
+                        </div>
+                        <div style="text-align: center; padding: 1rem;">
+                            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #4a7c59, #2c5530); margin: 0 auto 1rem; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">⚙️</div>
+                            <h4 style="color: #2c5530; margin-bottom: 0.5rem;">Engineering</h4>
+                            <p style="font-size: 0.9rem; color: #4a7c59;">Technical Development & Manufacturing Optimization</p>
+                        </div>
+                        <div style="text-align: center; padding: 1rem;">
+                            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #4a7c59, #2c5530); margin: 0 auto 1rem; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">🌍</div>
+                            <h4 style="color: #2c5530; margin-bottom: 0.5rem;">Global Supply Chain</h4>
+                            <p style="font-size: 0.9rem; color: #4a7c59;">Experience with Factory's in Europe, US, and Asia</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABOUT PAGE -->
+        <div class="page" id="about">
+            <div class="page-title">About Me</div>
+            <div class="breadcrumb">Home > About</div>
+            
+            <div class="content">
+                <div class="grid two-col">
+                    <div class="box" data-label="About Text">
+                        <h2 style="color: #2c5530; margin-bottom: 1rem;">My Story</h2>
+                        <p style="margin-bottom: 1rem;">I'm passionate about creating outdoor gear that performs when it matters most. With a background in mechanical engineering and a love for mountain adventures, I bridge the gap between technical innovation and real-world performance.</p>
+                        <p style="margin-bottom: 1rem;">My approach combines rigorous engineering principles with extensive field testing. Whether it's developing safer climbing protection or more efficient backcountry skiing equipment, I believe the best products come from understanding both the technical requirements and the human experience.</p>
+                        <p>When I'm not in the lab or at the drawing board, you'll find me testing gear in the mountains - because the best way to design outdoor equipment is to live the adventures it's meant to enable.</p>
+                    </div>
+                    <div class="box" data-label="Profile Image">
+                        <div style="width: 100%; height: 300px; background: linear-gradient(135deg, #4a7c59 0%, #2c5530 100%); border: 2px solid #4a7c59; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: white; position: relative;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 3rem; margin-bottom: 1rem;">🏔️</div>
+                                <p>Professional Photo</p>
+                                <div class="image-placeholder" style="top: 15px; right: 15px;">📷 Adventure Portrait</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="box" data-label="Technical Skills">
+                    <h2 style="color: #2c5530; margin-bottom: 1.5rem;">Technical Expertise</h2>
+                    <div class="grid two-col">
+                        <div>
+                            <p style="color: #2c5530; font-weight: bold;">CAD Design & Prototyping</p>
+                            <div class="skill-bar"><div class="skill-fill" style="width: 90%;"></div></div>
+                            
+                            <p style="color: #2c5530; font-weight: bold;">Materials Engineering</p>
+                            <div class="skill-bar"><div class="skill-fill" style="width: 85%;"></div></div>
+                            
+                            <p style="color: #2c5530; font-weight: bold;">Testing & Validation</p>
+                            <div class="skill-bar"><div class="skill-fill" style="width: 95%;"></div></div>
+                        </div>
+                        <div>
+                            <p style="color: #2c5530; font-weight: bold;">Product Development</p>
+                            <div class="skill-bar"><div class="skill-fill" style="width: 88%;"></div></div>
+                            
+                            <p style="color: #2c5530; font-weight: bold;">Manufacturing Processes</p>
+                            <div class="skill-bar"><div class="skill-fill" style="width: 80%;"></div></div>
+                            
+                            <p style="color: #2c5530; font-weight: bold;">Field Research</p>
+                            <div class="skill-bar"><div class="skill-fill" style="width: 92%;"></div></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="box" data-label="Experience Timeline">
+                    <h2 style="color: #2c5530; margin-bottom: 1.5rem;">Professional Journey</h2>
+                    <div style="border-left: 3px solid #4a7c59; padding-left: 2rem; margin-left: 1rem;">
+                        <div style="margin: 2rem 0; position: relative;">
+                            <div style="position: absolute; left: -2.5rem; width: 15px; height: 15px; background: #2c5530; border-radius: 50%;"></div>
+                            <h3 style="color: #2c5530;">Product Developer III - Ski & Climb</h3>
+                            <p style="color: #4a7c59; font-style: italic;">Black Diamond Equipment | Dec 2022 - Present · 2 yrs 9 mos</p>
+                            <p>Leading advanced development of climbing and backcountry skiing equipment. Responsible for full product lifecycle from concept to market launch for products including:</p>
+                            <ul style="color: #4a7c59; padding-left: 1rem; margin-top: 0.5rem;">
+                                <li>-F24 Impulse Skis</li>
+                                <li>-F24 Hydra Ice Tool</li>
+                                <li>-F24 Traverse Ski Poles</li>
+                                <li>-F25 Impulse Skis</li>
+                                <li>-F25 UIAA Avalanche Probes</li>
+                                <li>-F25 Glidelite & Ascension Skins</li>
+                                <li>-F25 Expedition Ski Poles</li>
+                                <li>-Cyborg, Stinger, and Neve Crampon Re-Launches</li>
+                            </ul>
+                        </div>
+                        <div style="margin: 2rem 0; position: relative;">
+                            <div style="position: absolute; left: -2.5rem; width: 15px; height: 15px; background: #2c5530; border-radius: 50%;"></div>
+                            <h3 style="color: #2c5530;">Product Developer II - Hardgoods</h3>
+                            <p style="color: #4a7c59; font-style: italic;">Black Diamond Equipment | Dec 2020 - Dec 2022 · 2 yrs 1 mo</p>
+                            <p>Developed technical climbing and mountaineering hardgoods. Responsible for full product lifecycle from concept to market launch for products including:</p>
+                            <ul style="color: #4a7c59; padding-left: 1rem; margin-top: 0.5rem;">
+                                <li>-S21 Pearlock Carabiner</li>
+                                <li>-S21 Eco Gold Chalk</li>
+                                <li>-S21 Liquid White Gold Chalk</li>
+                                <li>-S22 Oz Carabiner</li>
+                                <li>-Various Tabled Carabiner Projects</li>
+                                <li>-S23 SpeedFi & SpeeDaisy</li>
+                                <li>-S23 Rotor</li>
+                                <li>-S23 Litewire Carabiner</li>
+                            </ul>
+                        </div>
+                        <div style="margin: 2rem 0; position: relative;">
+                            <div style="position: absolute; left: -2.5rem; width: 15px; height: 15px; background: #2c5530; border-radius: 50%;"></div>
+                            <h3 style="color: #2c5530;">Quality Engineer II</h3>
+                            <p style="color: #4a7c59; font-style: italic;">Black Diamond Equipment | Nov 2017 - Dec 2020 · 3 yrs 2 mos</p>
+                            <p style="color: #4a7c59; font-size: 0.9rem;">Greater Salt Lake City Area</p>
+                            <p>Implemented quality assurance systems and manufacturing optimization processes. Oversaw transition of products to new factories and maintained critical metrics for in-house manufacturing. Developed testing standards that reduced product defects and improved overall safety and durability. Projects included:</p>
+                            <ul style="color: #4a7c59; padding-left: 1rem; margin-top: 0.5rem;">
+                                <li>-S19 C4 Refresh</li>
+                                <li>-S19 Wall Iron Transition</li>
+                                <li>-S19 Ice Screw Transition</li>
+                                <li>-S19 Hex & Nut Factory Transition</li>
+                                <li>-S20 Z4 Cams</li>
+                                <li>-S20 Crampon Factory Transition</li>
+                                <li>-S20 Carabiner Factory Transition</li>
+                                <li>-In-house Audit Defense: Annual ISO Audit with no NCs found</li>
+                                <li>-Various Process Improvements totalling ~$31k in annual savings</li>
+                                <li style="margin-left: 1rem;">• Cam Scrap Reduction ~$21k: spec increase, process improvements, and quality alignment</li>
+                                <li style="margin-left: 1rem;">• Plating Process Improvement: ~$6k</li>
+                                <li style="margin-left: 1rem;">• In-house Scale Calibration: ~$5k</li>
+                            </ul>
+                        </div>
+                        <div style="margin: 2rem 0; position: relative;">
+                            <div style="position: absolute; left: -2.5rem; width: 15px; height: 15px; background: #2c5530; border-radius: 50%;"></div>
+                            <h3 style="color: #2c5530;">Operations Management Leadership Program (OMLP)</h3>
+                            <p style="color: #4a7c59; font-style: italic;">GE Healthcare | Jul 2015 - Nov 2017 · 2 yrs 5 mos</p>
+                            <p style="color: #4a7c59; font-size: 0.9rem;">Greater Salt Lake City Area</p>
+                            <p style="margin-bottom: 0.5rem;">Leadership program consisting of 3, 8-month rotations across the General Electric Healthcare supply chain:</p>
+                            <ul style="color: #4a7c59; padding-left: 1rem; margin: 0.5rem 0;">
+                                <li><strong>1st Rotation:</strong> Commodity Sourcing Leader - Printers and Cloud Software</li>
+                                <li><strong>2nd Rotation:</strong> Production Team Leader - CT Detectors</li>
+                                <li><strong>3rd Rotation:</strong> Advanced Manufacturing Engineering Program Leader - OEC</li>
+                                <li><strong>Off Program:</strong> Advanced Manufacturing Engineer - X-ray Tubes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PORTFOLIO PAGE -->
+        <div class="page" id="portfolio">
+            <div class="page-title">My Work</div>
+            <div class="breadcrumb">Home > Portfolio</div>
+            
+            <div class="content">
+                <div class="box" data-label="Portfolio Categories">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <button class="btn" style="margin: 0 0.5rem;">All Projects</button>
+                        <button class="btn" style="margin: 0 0.5rem;">Climbing Gear</button>
+                        <button class="btn" style="margin: 0 0.5rem;">Ski Equipment</button>
+                        <button class="btn" style="margin: 0 0.5rem;">Safety Systems</button>
+                    </div>
+                </div>
+                
+                <div class="box" data-label="Project Gallery">
+                    <div class="grid three-col">
+                        <div class="product-card z4-camalots">
+                            <div class="image-placeholder">📷 Z4 Action Shot</div>
+                            <div style="text-align: center; z-index: 2; position: relative;">
+                                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🧗</div>
+                                <h3 style="font-weight: bold; margin-bottom: 0.5rem;">Z4 Camalots</h3>
+                                <p style="font-size: 0.9rem; line-height: 1.4; opacity: 0.9;">Revolutionary active camming device with improved trigger action and expanded size range for versatile rock climbing protection.</p>
+                            </div>
+                        </div>
+                        <div class="product-card helio-skis">
+                            <div class="image-placeholder">📷 Helio in Action</div>
+                            <div style="text-align: center; z-index: 2; position: relative;">
+                                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎿</div>
+                                <h3 style="font-weight: bold; margin-bottom: 0.5rem;">Helio Skis</h3>
+                                <p style="font-size: 0.9rem; line-height: 1.4; opacity: 0.9;">Lightweight backcountry ski series engineered for uphill efficiency and downhill performance in variable snow conditions.</p>
+                            </div>
+                        </div>
+                        <div class="product-card climbing-skins">
+                            <div class="image-placeholder">📷 Skin Application</div>
+                            <div style="text-align: center; z-index: 2; position: relative;">
+                                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⛷️</div>
+                                <h3 style="font-weight: bold; margin-bottom: 0.5rem;">Climbing Skins</h3>
+                                <p style="font-size: 0.9rem; line-height: 1.4; opacity: 0.9;">Advanced ski touring skins with optimized grip-to-glide ratio and enhanced durability for extended backcountry adventures.</p>
+                            </div>
+                        </div>
+                        <div class="product-card" style="background: linear-gradient(135deg, #87ceeb 0%, #2c5530 100%); color: white;">
+                            <div class="image-placeholder">📷 Crampon Testing</div>
+                            <div style="text-align: center; z-index: 2; position: relative;">
+                                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🦶</div>
+                                <h3 style="font-weight: bold; margin-bottom: 0.5rem;">Crampon Refinement</h3>
+                                <p style="font-size: 0.9rem; line-height: 1.4; opacity: 0.9;">Advanced traction systems with improved binding mechanisms and enhanced durability for technical mountaineering.</p>
+                            </div>
+                        </div>
+                        <div class="product-card" style="background: linear-gradient(135deg, #2c5530 0%, #87ceeb 100%); color: white;">
+                            <div class="image-placeholder">📷 Ice Axe Development</div>
+                            <div style="text-align: center; z-index: 2; position: relative;">
+                                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⛏️</div>
+                                <h3 style="font-weight: bold; margin-bottom: 0.5rem;">Ice Axes</h3>
+                                <p style="font-size: 0.9rem; line-height: 1.4; opacity: 0.9;">Technical ice tools with ergonomic grip design and improved pick geometry for alpine and mixed climbing.</p>
+                            </div>
+                        </div>
+                        <div class="product-card" style="background: linear-gradient(135deg, #4a7c59 0%, #1e3a20 100%); color: white;">
+                            <div class="image-placeholder">📷 Carabiner Testing</div>
+                            <div style="text-align: center; z-index: 2; position: relative;">
+                                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔗</div>
+                                <h3 style="font-weight: bold; margin-bottom: 0.5rem;">Carabiners</h3>
+                                <p style="font-size: 0.9rem; line-height: 1.4; opacity: 0.9;">Lightweight connectors engineered for optimal strength-to-weight ratio and reliable gate action in all conditions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="box" data-label="Featured Case Study">
+                    <h2 style="color: #2c5530; margin-bottom: 1.5rem;">Z4 Camalot Development Case Study</h2>
+                    <div class="grid two-col">
+                        <div>
+                            <div style="width: 100%; height: 250px; background: linear-gradient(135deg, #2c5530 0%, #4a7c59 100%); border: 2px solid #4a7c59; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; border-radius: 8px; color: white; text-align: center; position: relative;">
+                                <div>
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">🧗</div>
+                                    <h4>Z4 Camalot Field Testing</h4>
+                                    <p style="font-size: 0.9rem; opacity: 0.9;">Yosemite Valley, CA</p>
+                                </div>
+                                <div class="image-placeholder" style="top: 15px; right: 15px;">📷 Testing Documentation</div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="color: #2c5530; margin-bottom: 1rem;">Engineering Innovation</h3>
+                            <p style="margin-bottom: 1rem;"><strong style="color: #2c5530;">Challenge:</strong> Create a lighter, more reliable camming device with improved trigger mechanics and expanded size range for modern climbing routes.</p>
+                            <p style="margin-bottom: 1rem;"><strong style="color: #2c5530;">Solution:</strong> Redesigned cam profile geometry, implemented dual-axle system, and conducted extensive field testing across various rock types and placements.</p>
+                            <p style="margin-bottom: 1.5rem;"><strong style="color: #2c5530;">Result:</strong> 25% weight reduction, 40% improvement in trigger reliability, and expanded protection range from 0.4" to 6" in a single series.</p>
+                            <button class="btn">View Full Case Study</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESUME PAGE -->
+        <div class="page" id="resume">
+            <div class="page-title">Resume</div>
+            <div class="breadcrumb">Home > Resume</div>
+            
+            <div class="content">
+                <div class="box" data-label="Resume Actions">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <button class="btn">📄 Download PDF Resume</button>
+                        <button class="btn" style="margin-left: 1rem;">🖨️ Print Resume</button>
+                    </div>
+                </div>
+                
+                <div class="grid two-col">
+                    <div>
+                        <div class="box" data-label="Contact Information">
+                            <h2 style="color: #2c5530; margin-bottom: 1rem;">Contact Information</h2>
+                            <p style="margin: 0.5rem 0; color: #4a7c59;">📧 zach.averill@email.com</p>
+                            <p style="margin: 0.5rem 0; color: #4a7c59;">📱 (555) 123-4567</p>
+                            <p style="margin: 0.5rem 0; color: #4a7c59;">🌐 zachaverill.com</p>
+                            <p style="margin: 0.5rem 0; color: #4a7c59;">📍 Boulder, Colorado</p>
+                            <p style="margin: 0.5rem 0; color: #4a7c59;">💼 LinkedIn: /in/zachaverill</p>
+                        </div>
+                        
+                        <div class="box" data-label="Core Skills">
+                            <h2 style="color: #2c5530; margin-bottom: 1rem;">Technical Skills</h2>
+                            <div style="margin: 1rem 0;">
+                                <h4 style="color: #2c5530; margin-bottom: 0.5rem;">Design & Engineering</h4>
+                                <ul style="list-style: none; padding: 0; color: #4a7c59;">
+                                    <li>• SolidWorks & CAD Design</li>
+                                    <li>• Product Development</li>
+                                    <li>• Materials Engineering</li>
+                                    <li>• Prototype Development</li>
+                                </ul>
+                            </div>
+                            <div style="margin: 1rem 0;">
+                                <h4 style="color: #2c5530; margin-bottom: 0.5rem;">Testing & Validation</h4>
+                                <ul style="list-style: none; padding: 0; color: #4a7c59;">
+                                    <li>• Field Testing Protocols</li>
+                                    <li>• Safety Standards Compliance</li>
+                                    <li>• Performance Analysis</li>
+                                    <li>• Quality Assurance</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="box" data-label="Certifications">
+                            <h2 style="color: #2c5530; margin-bottom: 1rem;">Certifications</h2>
+                            <p style="margin: 1rem 0;"><strong style="color: #2c5530;">AIAG Certified Engineer</strong><br>
+                            <span style="color: #4a7c59;">Outdoor Industry Association (2023)</span></p>
+                            <p style="margin: 1rem 0;"><strong style="color: #2c5530;">Wilderness First Responder</strong><br>
+                            <span style="color: #4a7c59;">National Outdoor Leadership School (2022)</span></p>
+                            <p style="margin: 1rem 0;"><strong style="color: #2c5530;">Rock Climbing Instructor</strong><br>
+                            <span style="color: #4a7c59;">American Mountain Guides Association (2021)</span></p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="box" data-label="Professional Summary">
+                            <h2 style="color: #2c5530; margin-bottom: 1rem;">Professional Summary</h2>
+                            <p>Innovative outdoor product development engineer with 3+ years of experience designing and testing high-performance mountain gear. Specialized in climbing protection systems, backcountry skiing equipment, and safety devices. Combines rigorous engineering principles with extensive field experience to create products that perform in real-world mountain environments.</p>
+                        </div>
+                        
+                        <div class="box" data-label="Work Experience">
+                            <h2 style="color: #2c5530; margin-bottom: 1rem;">Professional Experience</h2>
+                            
+                            <div style="margin-bottom: 2rem;">
+                                <h3 style="color: #2c5530;">Senior Product Development Engineer</h3>
+                                <p style="color: #4a7c59; font-style: italic; margin: 0.5rem 0;">Black Diamond Equipment | 2023 - Present</p>
+                                <ul style="color: #4a7c59; padding-left: 1rem;">
+                                    <li>• Led development of Z4 Camalot series, resulting in 25% weight reduction and 40% reliability improvement</li>
+                                    <li>• Managed cross-functional teams through full product lifecycle from concept to market launch</li>
+                                    <li>• Established new field testing protocols that reduced product recalls by 60%</li>
+                                    <li>• Collaborated with professional athletes to validate gear performance in extreme conditions</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="margin-bottom: 2rem;">
+                                <h3 style="color: #2c5530;">Product Development Engineer</h3>
+                                <p style="color: #4a7c59; font-style: italic; margin: 0.5rem 0;">Patagonia | 2021 - 2023</p>
+                                <ul style="color: #4a7c59; padding-left: 1rem;">
+                                    <li>• Developed innovative backcountry skiing equipment including Helio ski series</li>
+                                    <li>• Conducted materials research for sustainable outdoor gear applications</li>
+                                    <li>• Implemented rigorous testing standards that improved product durability by 35%</li>
+                                    <li>• Mentored junior engineers and led technical training workshops</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="box" data-label="Education">
+                            <h2 style="color: #2c5530; margin-bottom: 1rem;">Education</h2>
+                            <p style="margin: 1rem 0;"><strong style="color: #2c5530;">Bachelor of Science - Mechanical Engineering</strong><br>
+                            <span style="color: #4a7c59;">University of Colorado Boulder | 2021</span><br>
+                            <span style="color: #4a7c59;">Magna Cum Laude | GPA: 3.8/4.0</span><br>
+                            <span style="color: #4a7c59;">Senior Project: Lightweight Avalanche Safety Equipment Design</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT PAGE -->
+        <div class="page" id="contact">
+            <div class="page-title">Get In Touch</div>
+            <div class="breadcrumb">Home > Contact</div>
+            
+            <div class="content">
+                <div class="grid two-col">
+                    <div class="box" data-label="Contact Form">
+                        <h2 style="color: #2c5530; margin-bottom: 1rem;">Send Me a Message</h2>
+                        <form style="max-width: 600px;">
+                            <div style="margin: 1rem 0;">
+                                <label style="color: #2c5530; font-weight: bold;">Name *</label>
+                                <input type="text" style="width: 100%; height: 40px; border: 2px solid #4a7c59; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; margin-top: 0.5rem;" placeholder="Your Name">
+                            </div>
+                            <div style="margin: 1rem 0;">
+                                <label style="color: #2c5530; font-weight: bold;">Email *</label>
+                                <input type="email" style="width: 100%; height: 40px; border: 2px solid #4a7c59; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; margin-top: 0.5rem;" placeholder="your.email@example.com">
+                            </div>
+                            <div style="margin: 1rem 0;">
+                                <label style="color: #2c5530; font-weight: bold;">Project Type</label>
+                                <select style="width: 100%; height: 40px; border: 2px solid #4a7c59; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; margin-top: 0.5rem;">
+                                    <option>Product Development</option>
+                                    <option>Consulting</option>
+                                    <option>Field Testing</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div style="margin: 1rem 0;">
+                                <label style="color: #2c5530; font-weight: bold;">Message *</label>
+                                <textarea style="width: 100%; height: 120px; border: 2px solid #4a7c59; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; margin-top: 0.5rem; resize: vertical;" placeholder="Tell me about your project or question..."></textarea>
+                            </div>
+                            <button type="submit" class="btn">Send Message</button>
+                        </form>
+                    </div>
+                    
+                    <div>
+                        <div class="box" data-label="Contact Information">
+                            <h2 style="color: #2c5530; margin-bottom: 1rem;">Let's Connect</h2>
+                            <div style="margin: 2rem 0;">
+                                <h3 style="color: #2c5530; display: flex; align-items: center; gap: 0.5rem;"><span>📧</span> Email</h3>
+                                <p style="color: #4a7c59;">zach.averill@email.com</p>
+                                <p style="font-size: 0.9rem; color: #4a7c59; font-style: italic;">I typically respond within 24 hours</p>
+                            </div>
+                            
+                            <div style="margin: 2rem 0;">
+                                <h3 style="color: #2c5530; display: flex; align-items: center; gap: 0.5rem;"><span>📱</span> Phone</h3>
+                                <p style="color: #4a7c59;">(555) 123-4567</p>
+                                <p style="font-size: 0.9rem; color: #4a7c59; font-style: italic;">Available Mon-Fri, 9am-5pm MST</p>
+                            </div>
+                            
+                            <div style="margin: 2rem 0;">
+                                <h3 style="color: #2c5530; display: flex; align-items: center; gap: 0.5rem;"><span>🌐</span> Professional Networks</h3>
+                                <p style="color: #4a7c59;">LinkedIn: /in/zachaverill<br>
+                                GitHub: /zachaverill<br>
+                                ResearchGate: /zach-averill</p>
+                            </div>
+                            
+                            <div style="margin: 2rem 0;">
+                                <h3 style="color: #2c5530; display: flex; align-items: center; gap: 0.5rem;"><span>📍</span> Location</h3>
+                                <p style="color: #4a7c59;">Boulder, Colorado<br>
+                                Available for remote collaboration worldwide<br>
+                                Open to travel for field testing</p>
+                            </div>
+                        </div>
+                        
+                        <div class="box" data-label="Location Map">
+                            <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #87ceeb 0%, #4a7c59 100%); border: 2px solid #4a7c59; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: white; position: relative;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🗺️</div>
+                                    <p>Interactive Map</p>
+                                    <p style="font-size: 0.9rem; opacity: 0.9;">Boulder, Colorado</p>
+                                </div>
+                                <div class="image-placeholder" style="top: 15px; right: 15px;">📍 Location Pin</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="box" data-label="FAQ Section">
+                    <h2 style="color: #2c5530; margin-bottom: 1.5rem;">Frequently Asked Questions</h2>
+                    <div style="margin: 1.5rem 0;">
+                        <h3 style="color: #2c5530; margin-bottom: 0.5rem;">What's your typical project timeline?</h3>
+                        <p style="color: #4a7c59;">Most product development projects take 3-8 months depending on complexity, from initial concept through field testing and refinement.</p>
+                    </div>
+                    <div style="margin: 1.5rem 0;">
+                        <h3 style="color: #2c5530; margin-bottom: 0.5rem;">Do you work with startups and small companies?</h3>
+                        <p style="color: #4a7c59;">Absolutely! I love working with innovative companies of all sizes. I offer flexible consulting arrangements to fit different budgets and project scopes.</p>
+                    </div>
+                    <div style="margin: 1.5rem 0;">
+                        <h3 style="color: #2c5530; margin-bottom: 0.5rem;">Can you help with existing product improvements?</h3>
+                        <p style="color: #4a7c59;">Yes! I frequently work on optimizing existing products for better performance, weight reduction, or cost effectiveness.</p>
+                    </div>
+                    <div style="margin: 1.5rem 0;">
+                        <h3 style="color: #2c5530; margin-bottom: 0.5rem;">What industries do you work with?</h3>
+                        <p style="color: #4a7c59;">Primarily outdoor recreation, climbing, skiing, mountaineering, and adventure sports equipment. I also consult on general mechanical design projects.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>&copy; 2024 Zach Averill. All rights reserved.</p>
+            <p>Designed for adventure, built to last ⛰️</p>
+        </footer>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update nav links
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
